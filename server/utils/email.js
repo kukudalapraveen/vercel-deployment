@@ -2,19 +2,22 @@ const nodemailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
 
 const sendEmail = async (to, subject, text) => {
+  const EMAIL="praveendevmail@gmail.com"
+const EMAIL_PASSWORD="hoef xvdb aghy mmuh"
+
   const transporter = nodemailer.createTransport(
     smtpTransport({
       service: 'gmail',
       port: 465,
       auth: {
-        user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASSWORD
+        user: EMAIL,
+        pass: EMAIL_PASSWORD
       }
     })
   );
 
   const mailOptions = {
-    from: process.env.EMAIL,
+    from: EMAIL,
     to,
     subject,
     text

@@ -10,9 +10,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const MONGO_URI ="mongodb+srv://developer:developer@atlascluster.r2g1ftc.mongodb.net/mydatabase?retryWrites=true&w=majority"
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
+    await mongoose.connect(MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
