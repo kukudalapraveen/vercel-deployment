@@ -13,11 +13,6 @@ app.use(express.json());
 
 // Import auth routes
 const authRoutes = require('./routes/auth');
-
-app.use('/',(req,res)=>{
-  res.send(`Backend server running on port:${process.env.PORT}`)
-})
-
 // Use auth routes
 app.use('/api/auth', authRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -31,4 +26,8 @@ mongoose.connect(process.env.MONGO_URI, {
   .catch(err => console.error(err));
 
 const PORT = process.env.PORT || 5000;
+app.use('/',(req,res)=>{
+  res.send(`Backend server running on port:${PORT}`)
+})
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
