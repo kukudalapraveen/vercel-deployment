@@ -1,0 +1,50 @@
+/* client/src/components/Layout.css */
+
+.header {
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between; /* Space between left and right elements */
+    align-items: center;
+    position: fixed; /* Fixes the header to the top */
+    top: 0; /* Aligns it to the top of the page */
+    width: 100%; /* Ensures it spans the full width of the viewport */
+    z-index: 1000; /* Ensures it stays above other content */
+    transform: scale(0.95); /* Scales down the header slightly */
+    transform-origin: top; /* Keeps the scaling from the top */
+  }
+  
+  .nav {
+    display: flex;
+    width: 100%;
+  }
+  
+  .nav-left {
+    /* Any styles for left-aligned items, if necessary */
+  }
+  
+  .nav-right {
+    margin-left: auto; /* Pushes the links to the right */
+  }
+  
+  .nav a {
+    text-decoration: none;
+    color: #007bff;
+    margin-left: 15px;
+  }
+  
+  .nav a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Adjust the margin for the Login link */
+  .nav-right a:last-child {
+    margin-left: 30px; /* Increase this value as needed */
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
+    margin-top: 60px; /* Adds space to avoid overlap with the fixed header */
+  }
+  
