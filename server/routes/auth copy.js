@@ -16,20 +16,18 @@ const ensureDirectoryExists = (dirPath) => {
   }
 };
 
-// Use /tmp directory for uploads as it is writable
-const uploadDir = '/tmp/uploads';
-const videoDir = '/tmp/videos';
+// Ensure upload directories exist
+const uploadDir = path.join(__dirname, '..', 'uploads');
+const videoDir = path.join(__dirname, '..', 'videos');
 ensureDirectoryExists(uploadDir);
 ensureDirectoryExists(videoDir);
-
 // Register route
 router.post('/register', async (req, res) => {
-  const { firstName, lastName, email, phoneNumber } = req.body;
-  const userPassword = (firstName.slice(0, 4) + lastName.slice(0, 4) + phoneNumber.slice(0, 4)).replaceAll(" ", "");
-  const encryptedPassword = await bcrypt.hash(userPassword, 10);
-
+  const { firstName,lastName, email, phoneNumber } = req.body;
+    const userPassword = (firstName.slice(0,4)+lastName.slice(0,4)+phoneNumber.slice(0,4)).replaceAll(" ","") 
+   const encrytpedPassword = await bcrypt.hash(userPassword, 10)
   try {
-    console.log("user registration under process")
+    console.log("user registraion under processs")
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ msg: 'User already exists' });
@@ -40,27 +38,32 @@ router.post('/register', async (req, res) => {
       lastName,
       email,
       phoneNumber,
-      encryptedPassword,
+      encrytpedPassword,
     });
 
     await user.save();
 
+    
+
     // Send welcome email
     await sendEmail(email, 'Welcome!', `Thanks for registering!,\n\n\nYour UserName is ${firstName} and password is ${userPassword}`);
-    
-    user.password = userPassword;
-    user.userPassword = userPassword;
-    
+    // const emailResponse = await sendEmail(email, subject, text);
+    user.password = userPassword
+    user.userPassword=userPassword;
+    // res.json({ token,firstName,password:userPassword,email });
     res.json(user);
   } catch (err) {
-    console.error(err, "user registration failed");
+    console.error(err,"user registeration failed");
     res.status(500).json({ msg: 'Server error' });
   }
+
+
+
 });
 
 router.post('/login', async (req, res) => {
   const { firstName, password } = req.body;
-  console.log(firstName, password, "emailpasswordddddddddd")
+  console.log(firstName,password,"emailpassswordddddddddd")
   try {
     // Check if user exists
     const user = await User.findOne({ firstName });
@@ -69,13 +72,15 @@ router.post('/login', async (req, res) => {
     }
 
     // Check password
-    const isMatch = await bcrypt.compare(password, user.encryptedPassword);
+    const isMatch =await bcrypt.compare(password, user.encrytpedPassword);;
     if (!isMatch) {
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
 
+  
+
     // Respond with user info
-    res.json({ firstName: user.firstName, email: user.email, profileImage: user.profileImage });
+    res.json({  firstName: user.firstName, email:user.email,profileImage:user.profileImage });
   } catch (err) {
     console.error(err, "Login failed");
     res.status(500).json({ msg: 'Server error' });
@@ -226,6 +231,7 @@ router.get('/user/:firstName/videos', async (req, res) => {
   }
 });
 
+
 // Example Express route in your backend
 router.get('/users-with-videos', async (req, res) => {
   try {
@@ -235,6 +241,8 @@ router.get('/users-with-videos', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch users with videos' });
   }
 });
+
+
 
 // Update user details (firstName, lastName, email)
 router.put('/user/:username/details', async (req, res) => {
@@ -264,5 +272,6 @@ router.put('/user/:username/details', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
 
 module.exports = router;
